@@ -48,14 +48,28 @@ func main() {
 func handleClientConnection(conn net.Conn) {
 	// handling buffer writes
 	// it take the connection and then creates the buffer
+	file, err := os.Create("./sample_output.txt")
+	if err != nil {
+		panic(err)
+	}
+	defer close(file)
 	for {
 		buffer, err := bufio.NewReader(conn).ReadBytes('\n')
 		if err != nil {
 			fmt.Println("Client left")
 			conn.Close()
+			// writer.Flush()
 			return
 		}
-		fmt.Print("Client message:", string(buffer[:]))
+		file.WriteString(string(buffer[:]))
+		fmt.Printf("%T", []byte("hello"))
+
+		// Sending a reply back to client for synchronous connection
+		conn.Write([]byte("Y\n"))
 	}
 
+}
+func close(file *os.File) {
+	fmt.Println("Closing the file")
+	file.Close()
 }
