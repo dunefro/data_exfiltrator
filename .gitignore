@@ -1,2 +1,8 @@
+# sample files
 server/sample_output.txt
+
+# binary
 data_exfiltrator
+
+# vscode
+.vscode/
