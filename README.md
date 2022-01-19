@@ -4,10 +4,11 @@ Generally this purpose is fulfilled with the help of tools like `scp` but that g
 This tool will be able to transfer text file from the remote machine to your local over TCP connection.
 
 # Pre-requisites
-(Nothing)
+Have task command
 
 # Installing
-You can download the latest release from releases.
+1. Download the source code
+2. Build commands for windows and linux.
 
 ## Steps
 1. Run `server` subcommand to run a server over your local to accept file transfers from the remote machine (explained later).
