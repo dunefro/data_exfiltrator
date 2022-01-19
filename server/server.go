@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"bufio"
@@ -8,27 +8,15 @@ import (
 )
 
 const (
-	connHost = "localhost"
-	// connPort = "8080"
 	connType = "tcp"
 )
 
-func main() {
-
-	// to get the port
-	var connPort string
-	if len(os.Args) <= 1 {
-		fmt.Println("No port was specified, using default 8080")
-		connPort = "8080"
-	} else {
-		connPort = os.Args[1]
-	}
+func Serve(fileName, connHost, connPort string) error {
 
 	fmt.Printf("Starting %s server on %s:%s\n", connType, connHost, connPort)
 	conn, err := net.Listen(connType, connHost+":"+connPort)
 	if err != nil {
-		fmt.Println("Connection error", connHost+":"+connPort)
-		panic(err.Error())
+		return fmt.Errorf("ConnectionError: Not able to connect %s", connHost+":"+connPort)
 	}
 	defer conn.Close()
 
@@ -41,14 +29,15 @@ func main() {
 			panic(err.Error())
 		}
 		fmt.Println("Client", client.RemoteAddr().String(), "connected")
-		go handleClientConnection(client)
+		go handleClientConnection(client, fileName)
+		fmt.Println("You can press Ctrl+c to terminate the program")
 	}
 }
 
-func handleClientConnection(conn net.Conn) {
+func handleClientConnection(conn net.Conn, fileName string) {
 	// handling buffer writes
 	// it take the connection and then creates the buffer
-	file, err := os.Create("./sample_output.txt")
+	file, err := os.Create(fileName)
 	if err != nil {
 		panic(err)
 	}
@@ -58,11 +47,9 @@ func handleClientConnection(conn net.Conn) {
 		if err != nil {
 			fmt.Println("Client left")
 			conn.Close()
-			// writer.Flush()
 			return
 		}
 		file.WriteString(string(buffer[:]))
-		fmt.Printf("%T", []byte("hello"))
 
 		// Sending a reply back to client for synchronous connection
 		conn.Write([]byte("Y\n"))
@@ -71,5 +58,7 @@ func handleClientConnection(conn net.Conn) {
 }
 func close(file *os.File) {
 	fmt.Println("Closing the file")
+	fmt.Println()
+	fmt.Println("Listening ... (press Ctrl+c to terminate)")
 	file.Close()
 }
