@@ -7,34 +7,34 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/dunefro/data_exfiltrator/server"
 	"github.com/spf13/cobra"
 )
 
 // serverCmd represents the server command
 var serverCmd = &cobra.Command{
 	Use:   "server",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "creating server",
+	Long:  `This will create a server at a specified port for connection and output to directed file`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("server called")
+		fileName, _ := cmd.Flags().GetString("output")
+		host, _ := cmd.Flags().GetString("host")
+		port, _ := cmd.Flags().GetString("port")
+
+		err := server.Serve(fileName, host, port)
+		if err != nil {
+			fmt.Println(err.Error())
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(serverCmd)
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// serverCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// serverCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// defining flags
+	serverCmd.PersistentFlags().StringP("output", "o", "", "output(text file) to transfer the data (required)")
+	serverCmd.MarkPersistentFlagRequired("output")
+	serverCmd.PersistentFlags().StringP("host", "", "127.0.0.1", "host that you wish to connect")
+	serverCmd.PersistentFlags().StringP("port", "p", "8080", "port that you wish to connect")
 }
