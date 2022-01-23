@@ -17,7 +17,6 @@ var serverCmd = &cobra.Command{
 	Short: "creating server",
 	Long:  `This will create a server at a specified port for connection and output to directed file`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("server called")
 		fileName, _ := cmd.Flags().GetString("output")
 		host, _ := cmd.Flags().GetString("host")
 		port, _ := cmd.Flags().GetString("port")
