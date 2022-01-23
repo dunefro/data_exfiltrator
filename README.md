@@ -8,12 +8,8 @@ This tool will be able to transfer text file from the remote machine to your loc
 
 # Installing
 1. Download the source code
-2. Build commands for windows
-```
-$ GOOS=windows GOARCH=amd64 go build .
-```
-This will create `data_exfiltrator.exe` file which you can use
-3. For linux use `GOOS=linux GOARCH=amd64 go build .`
+2. Build commands for windows `$ GOOS=windows GOARCH=amd64 go build .` This will create `data_exfiltrator.exe` file which you can use.
+3. For linux use `GOOS=linux GOARCH=amd64 go build .` 
 
 ## Steps
 1. Run `server` subcommand to run a server over your local to accept file transfers from the remote machine. `something.txt` is the file that will have your data once client transfers.
